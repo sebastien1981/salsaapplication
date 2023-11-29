@@ -10,9 +10,83 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_29_164058) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_09_093715) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "dances", force: :cascade do |t|
+    t.string "fullname"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "school_classes", force: :cascade do |t|
+    t.string "type_of_dance"
+    t.string "level"
+    t.bigint "school_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.time "beginning_of_time"
+    t.time "end_of_time"
+    t.string "day_of_week"
+    t.integer "room_number"
+    t.string "teacher_name"
+    t.index ["school_id"], name: "index_school_classes_on_school_id"
+  end
+
+  create_table "school_teachers", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.bigint "teacher_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_school_teachers_on_school_id"
+    t.index ["teacher_id"], name: "index_school_teachers_on_teacher_id"
+  end
+
+  create_table "schools", force: :cascade do |t|
+    t.string "name"
+    t.string "approval_number"
+    t.string "phone_number"
+    t.string "address_mail_pdt"
+    t.string "phone_number_pdt"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "school_id"
+    t.string "address"
+    t.string "type_of_structure"
+    t.integer "number_room"
+    t.float "longitude"
+    t.float "latitude"
+    t.index ["school_id"], name: "index_schools_on_school_id"
+  end
+
+  create_table "teacher_dances", force: :cascade do |t|
+    t.bigint "teacher_id", null: false
+    t.bigint "dance_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dance_id"], name: "index_teacher_dances_on_dance_id"
+    t.index ["teacher_id"], name: "index_teacher_dances_on_teacher_id"
+  end
+
+  create_table "teachers", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.date "date_of_birth"
+    t.string "phone_number"
+    t.string "address_mail"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_schools", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_user_schools_on_school_id"
+    t.index ["user_id"], name: "index_user_schools_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -26,4 +100,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_164058) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "school_classes", "schools"
+  add_foreign_key "school_teachers", "schools"
+  add_foreign_key "school_teachers", "teachers"
+  add_foreign_key "schools", "schools"
+  add_foreign_key "teacher_dances", "dances"
+  add_foreign_key "teacher_dances", "teachers"
+  add_foreign_key "user_schools", "schools"
+  add_foreign_key "user_schools", "users"
 end
