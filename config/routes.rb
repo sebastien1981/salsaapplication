@@ -1,12 +1,17 @@
 Rails.application.routes.draw do
+  get 'dances/new'
+  get 'schools/new'
   devise_for :users
-  root to: "pages#home"
+  root to: "schools#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
-
   # Defines the root path route ("/")
-  # root "posts#index"
+  # root "articles#index"
+  resources :schools do
+    resources :school_classes
+    get '/dashboard', to: 'school_classes#dashboard'
+    resources :teachers
+    get '/advancedsearch', to: 'teachers#advancedsearch'
+  end
+  resources :dances
 end
