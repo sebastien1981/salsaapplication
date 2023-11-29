@@ -75,3 +75,12 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "geocoder"
+gem "faker"
+gem "cloudinary"
+gem 'active_storage_validations'
+gem "algoliasearch-rails"
+gem "timepicker-addon-rails"
+gem "rails-autocomplete"
+gem "simple_form_autocomplete"
