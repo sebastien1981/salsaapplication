@@ -1,0 +1,36 @@
+<h1>Teachers#new</h1>
+<p>Find me in app/views/teachers/edit.html.erb</p>
+
+<div class="">
+  <div class="row justify-content-center" >
+    <div class="col-12 col-lg-6">
+      <%= simple_form_for [@school, @teacher] do |f| %>
+        <div class="row">
+          <div class="col-8">
+            <%= f.input :first_name %>
+          </div>
+          <div class="col-8">
+            <%= f.input :last_name %>
+          </div>
+          <%= f.input :date_of_birth,
+            as: :string,
+            input_html: { data: { controller: "datepicker"} } %>
+          <div class="col-8">
+            <%= f.input :phone_number %>
+          </div>
+          <div class="col-8">
+            <%= f.input :address_mail %>
+          </div>
+          <div>Si vous ne trouvez pas le type dance que vous cherchez, cliquez sur le lien suivant:</div>
+          <%= link_to "Ajouter un nouveau type de dance", new_dance_path %>
+          <div class="col-8" >
+            <%= f.association :dances,
+                             as: :check_boxes,
+                             label_method: :fullname,
+                             :label => "Choisissez vos spécialités:" %>
+          </div>
+          <%= f.submit class: "btn btn-super"%>
+      <% end %>
+    </div>
+  </div>
+</div>

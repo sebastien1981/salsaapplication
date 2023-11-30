@@ -1,0 +1,20 @@
+<div class="row justify-content-center">
+  <div class="col-sm-8 my-3">
+    <h1>Teachers List</h1><table>
+  <tr>
+    <th><%= link_to "Nom du Professeur", :sort => "first_name" %></th>
+    <th><%= link_to "Prenom du professeur", :sort => "last_name" %></th>
+    <th><%= link_to "Date d'anniversaire", :sort => "date_of_birth" %> </th>
+  </tr>
+ <% @teachers.each do |teacher| %>
+  <tr>
+    <td><%= teacher.first_name %></td>
+    <td><%=teacher.last_name %></td><td>
+    <td><%=teacher.date_of_birth %></td>
+    <td><%=teacher.phone_number %></td>
+    <td><%=teacher.address_mail %></td>
+  </tr>
+  <% end %>
+ </table>
+  </div>
+</div>
