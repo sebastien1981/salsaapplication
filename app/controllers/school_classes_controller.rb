@@ -26,11 +26,6 @@ class SchoolClassesController < ApplicationController
       end
 
       #TEST a supprimer a la fin de l'indus
-      day_arr_1 = []
-      begin_arr_1 = []
-      end_arr_1 = []
-
-
       day_arr = []
       begin_arr = []
       begin_time = []
@@ -53,52 +48,36 @@ class SchoolClassesController < ApplicationController
       @endtime = end_arr[-1]
       #a garder pour !!!!!!!!!
 
-      #pour tester les resultats
-      @schoolclasses.each do |schoolclass|
-        if schoolclass.room_number == @room[w]
-          day_arr_1 << schoolclass.day_of_week
-          begin_arr_1 << schoolclass.beginning_of_time.strftime("%H:%M")
-        end_arr_1 << schoolclass.end_of_time.strftime("%H:%M")
-        end
-      end
+      @countbegintime = begin_time.count - 1
+      @countclass = @schoolclasses.count - 1
 
-      @endtime_t = end_arr_1[-1]
-      @schoolday_t = day_arr_1.uniq
-      @begintime_t = begin_arr_1.uniq
 
-      arr_cours_h1 = []
-      arr_cours_h2 = []
-      arr_cours_h3 = []
-      arr_cours_h4 = []
+      for countbegintime in 0..@countbegintime
+        for countclass in 0..@countclass
+          time_condition = @schoolclasses[countclass].beginning_of_time.strftime("%H:%M").include?(begin_time[countbegintime])
 
-      @schoolclasses.each do |schoolclass|
-        if (schoolclass.beginning_of_time.strftime("%H:%M").include?(@begintime_t[0]) && schoolclass.room_number == @room[w])
-          arr_cours_h1 << schoolclass
-        elsif (schoolclass.beginning_of_time.strftime("%H:%M").include?(@begintime_t[1]) && schoolclass.room_number == @room[w])
-          arr_cours_h2 << schoolclass
-        elsif (schoolclass.beginning_of_time.strftime("%H:%M").include?(@begintime_t[2]) && schoolclass.room_number == @room[w])
-          arr_cours_h3 << schoolclass
-        elsif (schoolclass.beginning_of_time.strftime("%H:%M").include?(@begintime_t[3]) && schoolclass.room_number == @room[w])
-          arr_cours_h4 << schoolclass
-        end
-      end
-
-      classdance1 = [arr_cours_h1, arr_cours_h2, arr_cours_h3, arr_cours_h4]
-      @countday1 = @schoolday_t.count - 1
-      @countarray1 = classdance1.count - 1
-
-      for countarray in 0..@countarray1
-        for countday in 0..@countday1
-          if (classdance1[countarray][countday] == nil)
-            classdance1[countarray].insert(countday,"")
-          elsif (classdance1[countarray][countday].day_of_week != @schoolday_t[countday])
-            classdance1[countarray].insert(countday,"")
+          if time_condition
+            #Use array to store the result instead of creating individual variables
+            arr_cours_h = SchoolClass.where(school_id: @school.id).where(beginning_of_time: begin_time[countbegintime]).where(room_number: @room[w]).order(:day_of_week)
+            instance_variable_set("@arr_cours_h#{countbegintime}", arr_cours_h)
           end
         end
       end
 
-      #fin test resultat
+      classdance = []
 
+      y = 0
+      begin_time.each do |timebegin|
+        classdance << instance_variable_get("@arr_cours_h#{y}")
+        y += 1
+      end
+
+      # ajoute l'horaire pour chaque element
+      x=0
+      begin_time.each do |timebegin|
+        instance_variable_set("@cours_h#{x}", classdance[x].to_a.insert(0, timebegin))
+        x += 1
+      end
     end#end for
 
   end
