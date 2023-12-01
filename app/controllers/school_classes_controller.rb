@@ -15,7 +15,8 @@ class SchoolClassesController < ApplicationController
     @roomcount = @room.count - 1
 
     #ajouter une boucle for
-    for w in 0..@roomcount
+    @room.each do |room|
+    #for w in 0..@roomcount
 
       x = 1
       for n in 0..@roomcount
@@ -32,14 +33,14 @@ class SchoolClassesController < ApplicationController
       end_arr = []
       schoolday = []
       @schoolclasses.each do |schoolclass|
-        if schoolclass.room_number == @room[w]
+        if schoolclass.room_number == room
           day_arr << schoolclass.day_of_week
           begin_arr << schoolclass.beginning_of_time.strftime("%H:%M")
           end_arr << schoolclass.end_of_time.strftime("%H:%M")
         end
       end
 
-      v=1#asup
+      w=0#asup
       #a garder pour !!!!!!!!!
       instance_variable_set("@schoolday_#{w}", day_arr.uniq)
       instance_variable_set("@begintime_#{w}", begin_arr.uniq)
@@ -58,7 +59,7 @@ class SchoolClassesController < ApplicationController
 
           if time_condition
             #Use array to store the result instead of creating individual variables
-            arr_cours_h = SchoolClass.where(school_id: @school.id).where(beginning_of_time: begin_time[countbegintime]).where(room_number: @room[w]).order(:day_of_week)
+            arr_cours_h = SchoolClass.where(school_id: @school.id).where(beginning_of_time: begin_time[countbegintime]).where(room_number: room).order(:day_of_week)
             instance_variable_set("@arr_cours_h#{countbegintime}", arr_cours_h)
           end
         end
@@ -78,7 +79,9 @@ class SchoolClassesController < ApplicationController
         instance_variable_set("@cours_h#{x}", classdance[x].to_a.insert(0, timebegin))
         x += 1
       end
-    end#end for
+      
+      w += 1
+    end#end for each
 
   end
   def new
