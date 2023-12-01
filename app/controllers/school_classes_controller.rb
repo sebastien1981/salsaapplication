@@ -43,17 +43,18 @@ class SchoolClassesController < ApplicationController
       @countbegintime = begin_time.count - 1
       @countclass = @schoolclasses.count - 1
 
-
-      for countbegintime in 0..@countbegintime
-        for countclass in 0..@countclass
-          time_condition = @schoolclasses[countclass].beginning_of_time.strftime("%H:%M").include?(begin_time[countbegintime])
+      z = 0
+      begin_time.each do |timebegin|
+        @schoolclasses.each do |schoolclasses|
+          time_condition = schoolclasses.beginning_of_time.strftime("%H:%M").include?(timebegin)
 
           if time_condition
             #Use array to store the result instead of creating individual variables
-            arr_cours_h = SchoolClass.where(school_id: @school.id).where(beginning_of_time: begin_time[countbegintime]).where(room_number: room).order(:day_of_week)
-            instance_variable_set("@arr_cours_h#{countbegintime}", arr_cours_h)
+            arr_cours_h = SchoolClass.where(school_id: @school.id).where(beginning_of_time: timebegin).where(room_number: room).order(:day_of_week)
+            instance_variable_set("@arr_cours_h#{z}", arr_cours_h)
           end
         end
+        z +=1
       end
 
       classdance = []
