@@ -16,15 +16,6 @@ class SchoolClassesController < ApplicationController
 
     #ajouter une boucle for
     @room.each do |room|
-    #for w in 0..@roomcount
-
-      x = 1
-      for n in 0..@roomcount
-        instance_variable_set("@day_arr_#{x}", [])
-        instance_variable_set("@begin_arr_#{x}", [])
-        instance_variable_set("@end_arr_#{x}", [])
-        x += 1
-      end
 
       #TEST a supprimer a la fin de l'indus
       day_arr = []
@@ -79,7 +70,7 @@ class SchoolClassesController < ApplicationController
         instance_variable_set("@cours_h#{x}", classdance[x].to_a.insert(0, timebegin))
         x += 1
       end
-      
+      raise
       w += 1
     end#end for each
 
