@@ -3,29 +3,17 @@
 <%= link_to "Acceder au listing des ecoles", root_path %>
 <% for u in 0..@roomcount  %>
 
-<% if @room.include?(@room[u]) %>
-  <table border="1px solid black">
-    <tr>
-      <th>&nbsp;</th>
-      <% instance_variable_get("@schoolday_#{u}").each do |schoolday| %>
-        <th><%= schoolday %></th>
-      <% end %>
-    </tr>
-    <tr >
-    <% for i in 0..@danceclasscount  %>
-      <td><%= @danceclass[i][0] %></td>
-      <% for t in 1..@v  %>
-        <% if @danceclass[i][t] == "" %>
-          <td>&nbsp;</td>
-        <% else %>
-          <td><%= @danceclass[i][t].level %><p><%= @danceclass[i][t].teacher_name %><p><%= @danceclass[i][t].type_of_dance %><p><%= @danceclass[i][t].day_of_week %><p><%= @danceclass[i][t].room_number %></td>
+  <% if @room.include?(@room[u]) %>
+    <table border="1px solid black">
+      <tr>
+        <th>&nbsp;</th>
+        <% instance_variable_get("@schoolday_#{u}").each do |schoolday| %>
+          <th><%= schoolday %></th>
         <% end %>
-      <% end  %>
+      </tr>
+    <tr>
+      <td><%= instance_variable_get("@endtime_#{u}") %></td>
     </tr>
-    <% end %>
-  <tr>
-    <td><%= @endtime %></td>
-  </tr>
-  </table>
-<% end %>
+    </table>
+  <% end %>
 <% end %>
