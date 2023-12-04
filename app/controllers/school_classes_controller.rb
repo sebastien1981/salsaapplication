@@ -44,6 +44,7 @@ class SchoolClassesController < ApplicationController
       @countclass = @schoolclasses.count - 1
 
       z = 0
+      classdance = []
       begin_time.each do |timebegin|
         @schoolclasses.each do |schoolclasses|
           time_condition = schoolclasses.beginning_of_time.strftime("%H:%M").include?(timebegin)
@@ -57,13 +58,12 @@ class SchoolClassesController < ApplicationController
         z +=1
       end
 
-      classdance = []
-
       y = 0
       begin_time.each do |timebegin|
         classdance << instance_variable_get("@arr_cours_h#{y}")
         y += 1
       end
+      @countarray = classdance.count - 1
 
       # ajoute l'horaire pour chaque element
       x=0
@@ -71,7 +71,44 @@ class SchoolClassesController < ApplicationController
         instance_variable_set("@cours_h#{x}", classdance[x].to_a.insert(0, timebegin))
         x += 1
       end
-      raise
+
+
+      t = 0
+      instance_variable_set("@v", instance_variable_get("@cours_h#{t}").count - 1)
+      danceclass = []
+      m = 0
+      classdance.each do |countarray|
+        danceclass << instance_variable_get("@cours_h#{m}")
+        # Use instance_variable_get to get the value of the instance variable
+        m += 1
+      end
+
+      @danceclass = danceclass
+      @danceclasscount = danceclass.count - 1
+
+      @day = day_arr.uniq
+      @countarray = classdance.count - 1
+
+      p = 1
+      @countday = []
+      @day.each do |day|
+        @countday << p
+        p += 1
+      end
+
+      schoolday.insert(0,"")
+
+      @danceclass.each do |danceclass|
+        @countday.each do |countday|
+          current_element = danceclass[countday]
+          if current_element.nil? || current_element.day_of_week != schoolday[countday]
+
+            #modifier cette ligne de code pour inserer les elements vide
+            danceclass.insert(countday,"")
+          end
+        end
+      end
+
       w += 1
     end#end for each
 
