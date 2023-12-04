@@ -46,5 +46,16 @@
       # end
 
       #fin test resultat
-      <!--
-     -->
+      <tr >
+      <% for i in 0..@danceclasscount  %>
+        <td><%= @danceclass[i][0] %></td>
+        <% for t in 1..@v  %>
+          <% if @danceclass[i][t] == "" %>
+            <td>&nbsp;</td>
+          <% else %>
+            <td><%= @danceclass[i][t].level %><p><%= @danceclass[i][t].teacher_name %><p><%= @danceclass[i][t].type_of_dance %><p><%= @danceclass[i][t].day_of_week %><p><%= @danceclass[i][t].room_number %></td>
+          <% end %>
+        <% end  %>
+      </tr>
+      <% end %>
+    
