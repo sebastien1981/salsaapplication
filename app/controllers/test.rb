@@ -46,16 +46,21 @@
       # end
 
       #fin test resultat
-      <tr >
-      <% for i in 0..@danceclasscount  %>
-        <td><%= @danceclass[i][0] %></td>
-        <% for t in 1..@v  %>
-          <% if @danceclass[i][t] == "" %>
+
+
+      
+
+
+
+      <tr>
+          <% for i in 0..instance_variable_get("@danceclasscount_#{u}") %>
+            <td><%= instance_variable_get("@danceclass_#{u}")[i][0] %></td>
+            <% for t in 1..instance_variable_get("@v_#{u}")  %>
+          <% if instance_variable_get("@danceclass_#{u}")[i][t] == "" %>
             <td>&nbsp;</td>
           <% else %>
-            <td><%= @danceclass[i][t].level %><p><%= @danceclass[i][t].teacher_name %><p><%= @danceclass[i][t].type_of_dance %><p><%= @danceclass[i][t].day_of_week %><p><%= @danceclass[i][t].room_number %></td>
+            <td><%= instance_variable_get("@danceclass_#{u}")[i][t].level %><p><%= instance_variable_get("@danceclass_#{u}")[i][t].teacher_name %><p><%= instance_variable_get("@danceclass_#{u}")[i][t].type_of_dance %><p><%= instance_variable_get("@danceclass_#{u}")[i][t].day_of_week %><p><%= instance_variable_get("@danceclass_#{u}")[i][t].room_number %></td>
           <% end %>
         <% end  %>
+          <% end %>
       </tr>
-      <% end %>
-    

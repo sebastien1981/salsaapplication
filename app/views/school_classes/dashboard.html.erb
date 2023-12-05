@@ -1,9 +1,9 @@
 <h1>Mon dashboard</h1>
-<!-- app/views/restaurants/index.html.erb -->
 <%= link_to "Acceder au listing des ecoles", root_path %>
 <% for u in 0..@roomcount  %>
 
   <% if @room.include?(@room[u]) %>
+  <h1>Room<%= u +1  %></h1>
     <table border="1px solid black">
       <tr>
         <th>&nbsp;</th>
@@ -11,9 +11,21 @@
           <th><%= schoolday %></th>
         <% end %>
       </tr>
-    <tr>
-      <td><%= instance_variable_get("@endtime_#{u}") %></td>
-    </tr>
+      <tr>
+        <% for i in 0..instance_variable_get("@danceclasscount_#{u}")  %>
+          <td><%= instance_variable_get("@danceclass_#{u}")[i][0] %></td>
+            <% for t in 1..instance_variable_get("@v_#{u}")  %>
+              <% if instance_variable_get("@danceclass_#{u}")[i][t] == "" %>
+                <td>&nbsp;</td>
+              <% else %>
+                <td><%= instance_variable_get("@danceclass_#{u}")[i][t].level %><p><%= instance_variable_get("@danceclass_#{u}")[i][t].teacher_name %><p><%= instance_variable_get("@danceclass_#{u}")[i][t].type_of_dance %></td>
+              <% end %>
+            <% end  %>
+      </tr>
+        <% end %>
+      <tr>
+        <td><%= instance_variable_get("@endtime_#{u}") %></td>
+      </tr>
     </table>
   <% end %>
 <% end %>

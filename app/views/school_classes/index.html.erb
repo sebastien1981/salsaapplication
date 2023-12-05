@@ -7,6 +7,7 @@
     <li>Jour de la semaine: <%=  schoolclass.day_of_week %></li>
     <li>Type de dance: <%=  schoolclass.type_of_dance %></li>
     <li>Niveau: <%=  schoolclass.level %></li>
+    <li>Room Number: <%=  schoolclass.room_number %></li>
     <li><%= schoolclass.beginning_of_time.strftime("Heure de début: %H:%M") %></li>
     <li><%= schoolclass.end_of_time.strftime("Heure de fin: %H:%M") %></li>
     <%= link_to "Supprimer cette horaire de mon école", school_school_class_path(@school,schoolclass), data: {turbo_method: :delete, turbo_confirm: "Etes-vous sure de vouloir supprimer cette horaire?"}  %>
