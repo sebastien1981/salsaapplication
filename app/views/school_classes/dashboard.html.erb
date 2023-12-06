@@ -6,7 +6,7 @@
   <h1>Room<%= u +1  %></h1>
     <table border="1px solid black">
       <tr>
-        <th>&nbsp;</th>
+        <th border-width="100px">&nbsp;</th>
         <% instance_variable_get("@schoolday_#{u}").each do |schoolday| %>
           <th><%= schoolday %></th>
         <% end %>
