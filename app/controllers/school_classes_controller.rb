@@ -6,23 +6,23 @@ class SchoolClassesController < ApplicationController
   end
 
   def dashboard
-    #recuperation des donnes par ecole
     school_classes_table = SchoolClass.arel_table
 
     case_statement = Arel::Nodes::Case.new
-  .when(school_classes_table[:day_of_week].eq("Dimanche")).then(1)
-  .when(school_classes_table[:day_of_week].eq("Lundi")).then(2)
-  .when(school_classes_table[:day_of_week].eq("Mardi")).then(3)
-  .when(school_classes_table[:day_of_week].eq("Mercredi")).then(4)
-  .when(school_classes_table[:day_of_week].eq("Jeudi")).then(5)
-  .when(school_classes_table[:day_of_week].eq("Vendredi")).then(6)
-  .when(school_classes_table[:day_of_week].eq("Samedi")).then(7)
+    .when(school_classes_table[:day_of_week].eq("Dimanche")).then(1)
+    .when(school_classes_table[:day_of_week].eq("Lundi")).then(2)
+    .when(school_classes_table[:day_of_week].eq("Mardi")).then(3)
+    .when(school_classes_table[:day_of_week].eq("Mercredi")).then(4)
+    .when(school_classes_table[:day_of_week].eq("Jeudi")).then(5)
+    .when(school_classes_table[:day_of_week].eq("Vendredi")).then(6)
+    .when(school_classes_table[:day_of_week].eq("Samedi")).then(7)
 
-@schoolclasses = SchoolClass.where(school_id: @school.id)
-  .order(:room_number)
-  .order(:beginning_of_time)
-  .order(case_statement)
-  .order(:day_of_week)
+    #recuperation des donnes par ecole en utilisant le case when
+  @schoolclasses = SchoolClass.where(school_id: @school.id)
+                               .order(:room_number)
+                               .order(:beginning_of_time)
+                               .order(case_statement)
+                               .order(:day_of_week)
 
     #recuperation des romms dans un array
     roomnumber_arr = []
