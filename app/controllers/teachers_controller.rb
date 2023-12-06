@@ -67,6 +67,24 @@ class TeachersController < ApplicationController
   def advancedsearch
     @school = School.find(params[:school_id])
     @teachers = Teacher.all.order(params[:sort])
+
+    if params[:query].present?
+      #sql_subquery = "first_name ILIKE :query AND last_name ILIKE :query"
+      if @teachers.where(first_name: params[:query])
+        #@teachers = @teachers.where(sql_subquery, query: "%#{params[:query]}%")
+        #@teachers.where(first_name: params[:query]).present?
+        @teachers = @teachers.where(first_name: params[:query])
+      else
+        redirect_to new_school_teacher_path,notice: "Vous venez d'être redirigé sur la page pour création d'un professeur"
+      end
+      # sql_subquery = <<~SQL
+      #   teachers.first_name @@ :query
+      #   OR teachers.last_name @@ :query
+      # SQL
+      # @teachers = @teachers.where(sql_subquery, query: params[:query])
+    # else
+
+    end
   end
 
   private
