@@ -29,108 +29,107 @@ class SchoolClassesController < ApplicationController
     @schoolclasses.each do |roomschool|
       roomnumber_arr << roomschool.room_number
     end
-    @room = roomnumber_arr.uniq
-    @roomcount = @room.count - 1
+    instance_variable_set("@room", roomnumber_arr.uniq)
+    instance_variable_set("@roomcount", @room.count - 1)
 
     #ajouter une boucle for
     w=0#asup
-    @room.each do |room|
+    if (@room.any?)
 
-      #declaration des arrays pour la suite du programme
-      day_arr = []
-      begin_arr = []
-      begin_time = []
-      end_arr = []
-      schoolday = []
-      #recuperation des jours, heure de début, et la dernière heure de fin des cours
-      @schoolclasses.each do |schoolclass|
-        if schoolclass.room_number == room
-          day_arr << schoolclass.day_of_week
-          begin_arr << schoolclass.beginning_of_time.strftime("%H:%M")
-          end_arr << schoolclass.end_of_time.strftime("%H:%M")
-        end
-      end
+      @room.each do |room|
 
-      #a garder pour !!!!!!!!!
-      instance_variable_set("@schoolday_#{w}", day_arr.uniq)
-      instance_variable_set("@endtime_#{w}", end_arr[-1])
-      instance_variable_set("@begintime_#{w}", begin_arr.uniq)
-      begin_time = begin_arr.uniq
-      schoolday = day_arr.uniq
-      @endtime = end_arr[-1]
-      #a garder pour !!!!!!!!!
-
-      @countbegintime = begin_time.count - 1
-      @countclass = @schoolclasses.count - 1
-
-      z = 0
-      classdance = []
-      begin_time.each do |timebegin|
-        @schoolclasses.each do |schoolclasses|
-          time_condition = schoolclasses.beginning_of_time.strftime("%H:%M").include?(timebegin)
-
-          if time_condition
-            #Use array to store the result instead of creating individual variables
-            arr_cours_h = SchoolClass.where(school_id: @school.id).where(beginning_of_time: timebegin).where(room_number: room).order(case_statement).order(:day_of_week)
-            instance_variable_set("@arr_cours_h#{z}", arr_cours_h)
+        #declaration des arrays pour la suite du programme
+        day_arr = []
+        begin_arr = []
+        begin_time = []
+        end_arr = []
+        schoolday = []
+        #recuperation des jours, heure de début, et la dernière heure de fin des cours
+        @schoolclasses.each do |schoolclass|
+          if schoolclass.room_number == room
+            day_arr << schoolclass.day_of_week
+            begin_arr << schoolclass.beginning_of_time.strftime("%H:%M")
+            end_arr << schoolclass.end_of_time.strftime("%H:%M")
           end
         end
-        z += 1
-      end
 
-      y = 0
-      begin_time.each do |timebegin|
-        classdance << instance_variable_get("@arr_cours_h#{y}")
-        y += 1
-      end
-      @countarray = classdance.count - 1
+        #a garder pour !!!!!!!!!
+        instance_variable_set("@schoolday_#{w}", day_arr.uniq)
+        instance_variable_set("@endtime_#{w}", end_arr[-1])
+        begin_time = begin_arr.uniq
+        schoolday = day_arr.uniq
+        #a garder pour !!!!!!!!!
 
-      # ajoute l'horaire pour chaque element
-      x=0
-      begin_time.each do |timebegin|
-        instance_variable_set("@cours_h#{x}", classdance[x].to_a.insert(0, timebegin))
-        x += 1
-      end
+        z = 0
+        classdance = []
+        begin_time.each do |timebegin|
+          @schoolclasses.each do |schoolclasses|
+            time_condition = schoolclasses.beginning_of_time.strftime("%H:%M").include?(timebegin)
 
-      t = 0
-      danceclass = []
-      m = 0
-      classdance.each do |countarray|
-        danceclass << instance_variable_get("@cours_h#{m}")
-        # Use instance_variable_get to get the value of the instance variable
-        m += 1
-      end
+            if time_condition
+              #Use array to store the result instead of creating individual variables
+              arr_cours_h = SchoolClass.where(school_id: @school.id).where(beginning_of_time: timebegin).where(room_number: room).order(case_statement).order(:day_of_week)
+              instance_variable_set("@arr_cours_h#{z}", arr_cours_h)
+            end
+          end
+          z += 1
+        end
 
-      @danceclass = danceclass
+        y = 0
+        begin_time.each do |timebegin|
+          classdance << instance_variable_get("@arr_cours_h#{y}")
+          y += 1
+        end
 
-      @day = day_arr.uniq
-      @countarray = classdance.count - 1
+        # ajoute l'horaire pour chaque element
+        x=0
+        begin_time.each do |timebegin|
+          instance_variable_set("@cours_h#{x}", classdance[x].to_a.insert(0, timebegin))
+          x += 1
+        end
 
-      p = 1
-      @countday = []
-      @day.each do |day|
-        @countday << p
-        p += 1
-      end
+        t = 0
+        danceclass = []
+        m = 0
+        classdance.each do |countarray|
+          danceclass << instance_variable_get("@cours_h#{m}")
+          # Use instance_variable_get to get the value of the instance variable
+          m += 1
+        end
 
-      schoolday.insert(0,"")
+        instance_variable_set("@danceclass", danceclass)
+        instance_variable_set("@day", day_arr.uniq)
 
-      @danceclass.each do |danceclass|
-        @countday.each do |countday|
-          current_element = danceclass[countday]
-          if current_element.nil? || current_element.day_of_week != schoolday[countday]
+        p = 1
+        @countday = []
+        @day.each do |day|
+          @countday << p
+          p += 1
+        end
 
-            #modifier cette ligne de code pour inserer les elements vide
-            danceclass.insert(countday, "")
+        #ajout d'un element vide pour les boucles suivantes
+        schoolday.insert(0,"")
+
+        #ajout d'element vide dans les tableux pour gérer les horaires vides
+        @danceclass.each do |danceclass|
+          @countday.each do |countday|
+            current_element = danceclass[countday]
+            if current_element.nil? || current_element.day_of_week != schoolday[countday]
+
+              #modifier cette ligne de code pour inserer les elements vide
+              danceclass.insert(countday, "")
+            end
           end
         end
-      end
-      instance_variable_set("@danceclass_#{w}", @danceclass)
-      instance_variable_set("@danceclasscount_#{w}", instance_variable_get("@danceclass_#{w}").count - 1)
-      instance_variable_set("@v_#{w}", instance_variable_get("@cours_h#{t}").count - 1)
+        instance_variable_set("@danceclass_#{w}", @danceclass)
+        instance_variable_set("@danceclasscount_#{w}", instance_variable_get("@danceclass_#{w}").count - 1)
+        instance_variable_set("@v_#{w}", instance_variable_get("@cours_h#{t}").count - 1)
 
-      w += 1
-    end#end for each
+        w += 1
+      end#end for each
+    else
+      redirect_to new_school_school_class_path(:school_id => @school.id), notice: "Vous avez été redirigé vers la page pour créer vos planning"
+    end
 
   end
 
