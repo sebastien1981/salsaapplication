@@ -61,36 +61,33 @@ class TeachersController < ApplicationController
       end
       SchoolTeacher.delete(idto)
     end
-    redirect_to school_teachers_path(@school), status: :see_other,notice: "Vous venez de supprimer ce #{@teacher.first_name} #{@teacher.last_name} de votre école"
+    redirect_to school_teachers_path(@school), status: :see_other, notice: "Vous venez de supprimer ce #{@teacher.first_name} #{@teacher.last_name} de votre école"
   end
 
   def advancedsearch
     @school = School.find(params[:school_id])
     @teachers = Teacher.all.order(params[:sort])
 
-    if params[:query].present?
-      #sql_subquery = "first_name ILIKE :query AND last_name ILIKE :query"
-      if @teachers.where(first_name: params[:query])
-        #@teachers = @teachers.where(sql_subquery, query: "%#{params[:query]}%")
-        #@teachers.where(first_name: params[:query]).present?
-        @teachers = @teachers.where(first_name: params[:query])
-      else
-        redirect_to new_school_teacher_path,notice: "Vous venez d'être redirigé sur la page pour création d'un professeur"
-      end
-      # sql_subquery = <<~SQL
-      #   teachers.first_name @@ :query
-      #   OR teachers.last_name @@ :query
-      # SQL
-      # @teachers = @teachers.where(sql_subquery, query: params[:query])
-    # else
+    sql_subquery_firstname = "first_name ILIKE :first_name"
+    sql_subquery_lastname = "last_name ILIKE :last_name"
 
+    if params[:first_name].present? && params[:last_name].present?
+      matching_teachers = @teachers.where(sql_subquery_firstname, first_name: "%#{params[:first_name]}%")
+                                   .where(sql_subquery_lastname, last_name: "%#{params[:last_name]}%")
+
+      if matching_teachers.present?
+        @teachers = matching_teachers
+      else
+        redirect_to new_school_teacher_path, notice: "Vous venez d'être redirigé sur la page pour création d'un professeur"
+      end
     end
   end
 
   private
 
   def teacher_params
-    params.require(:teacher).permit(:first_name, :last_name, :date_of_birth, :phone_number, :address_mail, dance_ids:[])
+    params.require(:teacher)
+          .permit(:first_name, :last_name, :date_of_birth, :phone_number, :address_mail, dance_ids: [])
   end
 
   def set_teacher
