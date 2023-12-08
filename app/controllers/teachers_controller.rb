@@ -71,15 +71,31 @@ class TeachersController < ApplicationController
     sql_subquery_firstname = "first_name ILIKE :first_name"
     sql_subquery_lastname = "last_name ILIKE :last_name"
 
+
     if params[:first_name].present? && params[:last_name].present?
-      matching_teachers = @teachers.where(sql_subquery_firstname, first_name: "%#{params[:first_name]}%")
+      @matching_teachers = @teachers.where(sql_subquery_firstname, first_name: "%#{params[:first_name]}%")
                                    .where(sql_subquery_lastname, last_name: "%#{params[:last_name]}%")
 
-      if matching_teachers.present?
-        @teachers = matching_teachers
+      if @matching_teachers.present?
+        @teachers = @matching_teachers
+        idtoadd = []
+        @teachers.each do |tea|
+          idtoadd << tea.id
+        end
+        idtoadd.each do |idto|
+          @schoolteacheck = SchoolTeacher.where(school_id: @school.id, teacher_id: idto)
+          if @schoolteacheck.any?
+            redirect_to school_advancedsearch_path, notice: "Ce prof est déja présent dans cette ecole"
+          else
+            @schoolteacher = SchoolTeacher.new(school_id: @school.id, teacher_id: idto)
+            @schoolteacher.save
+          end
+        end
+
       else
         redirect_to new_school_teacher_path, notice: "Vous venez d'être redirigé sur la page pour création d'un professeur"
       end
+
     end
   end
 
