@@ -1,5 +1,5 @@
     <h1>Teachers List</h1>
-<div class="row justify-content-center">
+<div class="row justify-content-center" data-controller="add-teacher">
   <div class="row justify-content-center">
     <div class="col-sm-8 my-3">
       <%= form_with url: school_advancedsearch_path, method: :get, class: "d-flex" do %>
@@ -31,7 +31,8 @@
           <% if @matching_teachers == nil %>
             <td><button class="btn btn-outline-primary" disabled>Add this teacher</button></td>
           <% else %>
-            <td><button class="btn btn-outline-primary" >Add this teacher</button></td>
+            <td><button class="btn btn-outline-primary"
+            data-action="click->add-teacher#addteacher" data-add-teacher-target="button">Add this teacher</button></td>
           <% end %>
 
 
