@@ -87,8 +87,8 @@ class TeachersController < ApplicationController
           if @schoolteacheck.any?
             redirect_to school_advancedsearch_path, notice: "Ce prof est déja présent dans cette ecole"
           else
-            @schoolteacher = SchoolTeacher.new(school_id: @school.id, teacher_id: idto)
-            @schoolteacher.save
+            #@schoolteacher = SchoolTeacher.new(school_id: @school.id, teacher_id: idto)
+            #@schoolteacher.save
           end
         end
 
