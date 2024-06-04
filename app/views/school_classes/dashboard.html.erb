@@ -3,7 +3,7 @@
 <% for u in 0..@roomcount  %>
 
   <% if @room.include?(@room[u]) %>
-  <h1>Room<%= u +1  %></h1>
+  <h1>Room<%= @room[u]  %></h1>
     <table border="1px solid black">
       <tr>
         <th border-width="100px">&nbsp;</th>
